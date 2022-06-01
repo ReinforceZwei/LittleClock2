@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace LittleClock2
 {
+    delegate void InvokeUpdateSettings(Settings settings);
+
     public partial class MainWin : Form
     {
         private Settings settings;
@@ -10,6 +12,8 @@ namespace LittleClock2
         // Dragging handle
         private bool isDragging = false;
         private Size mouseRelativePos;
+
+        private int initialStyle;
 
         public MainWin()
         {
@@ -20,7 +24,8 @@ namespace LittleClock2
             FormBorderStyle = FormBorderStyle.None;
             ControlBox = false;
             ShowInTaskbar = false;
-            TopMost = true;
+            TopMost = settings.AlwaysOnTop;
+            Location = settings.Location;
 
             timeDisplayLabel.Text = DateTime.Now.ToString(settings.TimeFormat);
 
@@ -29,8 +34,42 @@ namespace LittleClock2
 
             Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, 25, 20, 20));
 
+            initialStyle = GetWindowLong(this.Handle, -20);
+
             //var initialStyle = GetWindowLong(this.Handle, -20);
-            //SetWindowLong(this.Handle, -20, initialStyle | WS_EX_TOOLWINDOW);
+            SetWindowLong(this.Handle, -20, initialStyle | WS_EX_TOOLWINDOW);
+            initialStyle = GetWindowLong(this.Handle, -20);
+            //EnableClickThrough();
+        }
+
+        public void UpdateSettings(Settings newSettings)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new InvokeUpdateSettings(UpdateSettings), newSettings);
+                return;
+            }
+            settings = newSettings;
+
+            if (!Location.Equals(settings.Location))
+                Location = settings.Location;
+
+            TopMost = settings.AlwaysOnTop;
+
+            if (settings.ClickThrough)
+                EnableClickThrough();
+            else
+                DisableClickThrough();
+        }
+
+        private void EnableClickThrough()
+        {
+            SetWindowLong(this.Handle, -20, initialStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
+        }
+
+        private void DisableClickThrough()
+        {
+            SetWindowLong(this.Handle, -20, initialStyle);
         }
 
         private void OnMouseDown(object? sender, MouseEventArgs e)
@@ -98,7 +137,8 @@ namespace LittleClock2
 
         private void OnSettingMenuClicked(object? sender, EventArgs e)
         {
-            new SettingsWin(settings).ShowDialog();
+            settings.Location = Location;
+            new SettingsWin(settings, this).Show();
         }
 
         private void OnExitMenuClicked(object? sender, EventArgs e)
