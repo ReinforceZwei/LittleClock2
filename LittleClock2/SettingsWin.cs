@@ -13,6 +13,7 @@ namespace LittleClock2
     public partial class SettingsWin : Form
     {
         Settings settings;
+        Settings newSettings;
         MainWin mainWin;
 
         private static readonly string[] TimeFormat =
@@ -30,6 +31,7 @@ namespace LittleClock2
         {
             InitializeComponent();
             this.settings = settings;
+            this.newSettings = Settings.Clone(settings);
             this.mainWin = win;
 
             timeDisplayFormatComboBox.Items.AddRange(TimeFormat);
@@ -42,11 +44,55 @@ namespace LittleClock2
 
             locationXInput.Value = settings.Location.X;
             locationYInput.Value = settings.Location.Y;
+
+            useAbsoluteLocationCheckbox.Checked = !settings.UsePresetLocation;
+            locationXInput.Enabled = !settings.UsePresetLocation;
+            locationYInput.Enabled = !settings.UsePresetLocation;
+
+            RadioButton selectedPresetLocationButton = settings.PresetLocation switch
+            {
+                PresetLocation.TopLeft => topLeftLocationButton,
+                PresetLocation.Top => topLocationButton,
+                PresetLocation.TopRight => topRightLocationButton,
+                PresetLocation.Left => leftLocationButton,
+                PresetLocation.Center => centerLocationButton,
+                PresetLocation.Right => rightLocationButton,
+                PresetLocation.BottomLeft => bottomLeftLocation,
+                PresetLocation.Bottom => bottomLocationButton,
+                PresetLocation.BottomRight => bottomRightLocationButton,
+            };
+            selectedPresetLocationButton.Checked = true;
+
+            idleOpacityInput.Value = (decimal)settings.IdleOpacity;
+            idleTimeoutInput.Value = settings.IdleAfter;
+        }
+
+        public void NotifyMainWinLocationChange(Point location)
+        {
+            newSettings.Location = location;
+            locationXInput.Value = newSettings.Location.X;
+            locationYInput.Value = newSettings.Location.Y;
         }
 
         private void OnApplyButtonClicked(object? sender, EventArgs e)
         {
-            mainWin.UpdateSettings(settings);
+            var checkedLocation = locationGroupBox.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
+            if (checkedLocation != null)
+            {
+                newSettings.PresetLocation = checkedLocation.Text switch
+                {
+                    "Top Left" => PresetLocation.TopLeft,
+                    "Top" => PresetLocation.Top,
+                    "Top Right" => PresetLocation.TopRight,
+                    "Left" => PresetLocation.Left,
+                    "Center" => PresetLocation.Center,
+                    "Right" => PresetLocation.Right,
+                    "Bottom Left" => PresetLocation.BottomLeft,
+                    "Bottom" => PresetLocation.Bottom,
+                    "Bottom Right" => PresetLocation.BottomRight,
+                };
+            }
+            mainWin.ApplySettings(newSettings);
         }
 
         private void OnDoneButtonClicked(object? sender, EventArgs e)
@@ -56,37 +102,59 @@ namespace LittleClock2
 
         private void alwaysOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            settings.AlwaysOnTop = alwaysOnTopCheckBox.Checked;
+            newSettings.AlwaysOnTop = alwaysOnTopCheckBox.Checked;
         }
 
         private void draggableCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            settings.Draggable = draggableCheckBox.Checked;
+            newSettings.Draggable = draggableCheckBox.Checked;
         }
 
         private void hideOnHoverCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            settings.HideOnHover = hideOnHoverCheckBox.Checked;
+            newSettings.HideOnHover = hideOnHoverCheckBox.Checked;
         }
 
         private void clickThroughCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            settings.ClickThrough = clickThroughCheckBox.Checked;
+            newSettings.ClickThrough = clickThroughCheckBox.Checked;
         }
 
         private void locationXInput_ValueChanged(object sender, EventArgs e)
         {
-            settings.Location.X = Convert.ToInt32(locationXInput.Value);
+            newSettings.Location.X = Convert.ToInt32(locationXInput.Value);
         }
 
         private void locationYInput_ValueChanged(object sender, EventArgs e)
         {
-            settings.Location.Y = Convert.ToInt32(locationYInput.Value);
+            newSettings.Location.Y = Convert.ToInt32(locationYInput.Value);
         }
 
         private void timeDisplayFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            settings.TimeFormat = timeDisplayFormatComboBox.Text;
+            newSettings.TimeFormat = timeDisplayFormatComboBox.Text;
+        }
+
+        private void useAbsoluteLocationCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            bool check = useAbsoluteLocationCheckbox.Checked;
+            newSettings.UsePresetLocation = !check;
+            locationXInput.Enabled = check;
+            locationYInput.Enabled = check;
+            foreach (var i in locationGroupBox.Controls.OfType<RadioButton>())
+            {
+                i.Enabled = !check;
+            }
+        }
+
+        private void idleOpacityInput_ValueChanged(object sender, EventArgs e)
+        {
+            newSettings.IdleOpacity = (float)idleOpacityInput.Value;
+        }
+
+        private void idleTimeoutInput_ValueChanged(object sender, EventArgs e)
+        {
+            newSettings.IdleAfter = (int)idleTimeoutInput.Value;
         }
     }
 }

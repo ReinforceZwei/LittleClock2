@@ -31,12 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWin));
             this.timeDisplayLabel = new System.Windows.Forms.Label();
-            this.clockUpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.mouseHoverTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.iconContentMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.idleTimer = new System.Windows.Forms.Timer(this.components);
             this.iconContentMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,12 +55,6 @@
             this.timeDisplayLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
             this.timeDisplayLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             // 
-            // clockUpdateTimer
-            // 
-            this.clockUpdateTimer.Enabled = true;
-            this.clockUpdateTimer.Interval = 500;
-            this.clockUpdateTimer.Tick += new System.EventHandler(this.OnClockTimerTick);
-            // 
             // mouseHoverTimer
             // 
             this.mouseHoverTimer.Interval = 200;
@@ -70,7 +64,7 @@
             // 
             this.notifyIcon.ContextMenuStrip = this.iconContentMenu;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "notifyIcon1";
+            this.notifyIcon.Text = "Little Clock 2";
             this.notifyIcon.Visible = true;
             // 
             // iconContentMenu
@@ -94,6 +88,10 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
+            // idleTimer
+            // 
+            this.idleTimer.Tick += new System.EventHandler(this.idleTimer_Tick);
+            // 
             // MainWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -111,11 +109,11 @@
         #endregion
 
         private Label timeDisplayLabel;
-        private System.Windows.Forms.Timer clockUpdateTimer;
         private System.Windows.Forms.Timer mouseHoverTimer;
         private NotifyIcon notifyIcon;
         private ContextMenuStrip iconContentMenu;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.Timer idleTimer;
     }
 }

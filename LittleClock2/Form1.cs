@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Timers;
 
 namespace LittleClock2
 {
@@ -8,6 +9,7 @@ namespace LittleClock2
     public partial class MainWin : Form
     {
         private Settings settings;
+        private SettingsWin? settingsWin = null;
 
         // Dragging handle
         private bool isDragging = false;
@@ -15,15 +17,25 @@ namespace LittleClock2
 
         private int initialStyle;
 
+        private System.Timers.Timer clockUpdateTimer;
+
         public MainWin()
         {
             settings = new Settings();
 
             InitializeComponent();
+            InitializeStyle();
 
-            FormBorderStyle = FormBorderStyle.None;
-            ControlBox = false;
-            ShowInTaskbar = false;
+            clockUpdateTimer = new System.Timers.Timer();
+            clockUpdateTimer.Interval = TimeSpan.FromSeconds(1).TotalMilliseconds;
+            clockUpdateTimer.AutoReset = true;
+            clockUpdateTimer.Elapsed += OnClockTimerTick;
+            clockUpdateTimer.Start();
+
+            idleTimer.Interval = settings.IdleAfter;
+            idleTimer.Enabled = true;
+            idleTimer.Start();
+
             TopMost = settings.AlwaysOnTop;
             Location = settings.Location;
 
@@ -42,17 +54,30 @@ namespace LittleClock2
             //EnableClickThrough();
         }
 
-        public void UpdateSettings(Settings newSettings)
+        public void InitializeStyle()
+        {
+            FormBorderStyle = FormBorderStyle.None;
+            ControlBox = false;
+            ShowInTaskbar = false;
+        }
+
+        public void ApplySettings(Settings newSettings)
         {
             if (InvokeRequired)
             {
-                Invoke(new InvokeUpdateSettings(UpdateSettings), newSettings);
+                Invoke(new InvokeUpdateSettings(ApplySettings), newSettings);
                 return;
             }
-            settings = newSettings;
+            settings = Settings.Clone(newSettings);
 
-            if (!Location.Equals(settings.Location))
+            if (settings.UsePresetLocation)
+            {
+                UpdateWindowRelativeLocation();
+            }
+            else
+            {
                 Location = settings.Location;
+            }
 
             TopMost = settings.AlwaysOnTop;
 
@@ -60,6 +85,41 @@ namespace LittleClock2
                 EnableClickThrough();
             else
                 DisableClickThrough();
+
+            UpdateClockText();
+            Width = timeDisplayLabel.Width + 5;
+            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, 25, 20, 20));
+
+            idleTimer.Interval = settings.IdleAfter;
+            Opacity = settings.IdleOpacity;
+
+            settingsWin?.NotifyMainWinLocationChange(Location);
+        }
+
+        public void UpdateClockText()
+        {
+            timeDisplayLabel.Text = DateTime.Now.ToString(settings.TimeFormat);
+        }
+
+        public void UpdateWindowRelativeLocation()
+        {
+            var monitorSize = Screen.FromControl(this).Bounds.Size;
+            var relativeSize = new Size(monitorSize.Width - this.Width, monitorSize.Height - this.Height + 15);
+            int locationX = settings.PresetLocation switch
+            {
+                PresetLocation.TopLeft or PresetLocation.Left or PresetLocation.BottomLeft => 0,
+                PresetLocation.Top or PresetLocation.Center or PresetLocation.Bottom => relativeSize.Width / 2,
+                PresetLocation.TopRight or PresetLocation.Right or PresetLocation.BottomRight => relativeSize.Width,
+                _ => throw new InvalidOperationException("Invalid preset location")
+            };
+            var locationY = settings.PresetLocation switch
+            {
+                PresetLocation.TopLeft or PresetLocation.Top or PresetLocation.TopRight => 0,
+                PresetLocation.Left or PresetLocation.Center or PresetLocation.Right => relativeSize.Height / 2,
+                PresetLocation.BottomLeft or PresetLocation.Bottom or PresetLocation.BottomRight => relativeSize.Height,
+                _ => throw new InvalidOperationException("Invalid preset location")
+            };
+            this.Location = new Point(locationX, locationY);
         }
 
         private void EnableClickThrough()
@@ -69,7 +129,29 @@ namespace LittleClock2
 
         private void DisableClickThrough()
         {
-            SetWindowLong(this.Handle, -20, initialStyle);
+            SetWindowLong(this.Handle, -20, initialStyle | WS_EX_LAYERED);
+        }
+
+        private async void FadeIn(Form o, double opacity = 1, int interval = 80)
+        {
+            //Object is not fully invisible. Fade it in
+            while (o.Opacity < opacity)
+            {
+                await Task.Delay(interval);
+                o.Opacity += 0.05;
+            }
+            o.Opacity = opacity; //make fully visible
+        }
+
+        private async void FadeOut(Form o, double opacity = 0.1, int interval = 80)
+        {
+            //Object is fully visible. Fade it out
+            while (o.Opacity > opacity)
+            {
+                await Task.Delay(interval);
+                o.Opacity -= 0.05;
+            }
+            o.Opacity = opacity; //make fully invisible       
         }
 
         private void OnMouseDown(object? sender, MouseEventArgs e)
@@ -91,6 +173,7 @@ namespace LittleClock2
             {
                 isDragging = false;
                 settings.Location = Location;
+                settingsWin?.NotifyMainWinLocationChange(Location);
             }
         }
 
@@ -108,12 +191,22 @@ namespace LittleClock2
             {
                 mouseHoverTimer.Start();
                 Opacity = 0;
+            } else
+            {
+                if (Opacity != 1)
+                {
+                    FadeIn(this, interval: 10);
+                }
             }
         }
 
         private void OnMouseLeave(object? sender, EventArgs e)
         {
-
+            if (!settings.HideOnHover)
+            {
+                idleTimer.Enabled = true;
+                idleTimer.Start();
+            }
         }
 
         private void MouseHoverCheckTimerTick(object? sender, EventArgs e)
@@ -121,13 +214,26 @@ namespace LittleClock2
             if (!Bounds.Contains(Cursor.Position.X, Cursor.Position.Y))
             {
                 mouseHoverTimer.Stop();
-                Opacity = 1;
-            }
+                Opacity = settings.IdleOpacity;
+            } 
         }
 
         private void OnClockTimerTick(object? sender, EventArgs e)
         {
-            timeDisplayLabel.Text = DateTime.Now.ToString(settings.TimeFormat);
+            if (InvokeRequired)
+            {
+                Invoke(() =>
+                {
+                    UpdateClockText();
+                });
+            }
+        }
+
+        private void idleTimer_Tick(object sender, EventArgs e)
+        {
+            idleTimer.Stop();
+            idleTimer.Enabled = false;
+            FadeOut(this, settings.IdleOpacity, 50);
         }
 
         private void OnIconMenuClicked(object? sender, EventArgs e)
@@ -138,7 +244,8 @@ namespace LittleClock2
         private void OnSettingMenuClicked(object? sender, EventArgs e)
         {
             settings.Location = Location;
-            new SettingsWin(settings, this).Show();
+            settingsWin = new SettingsWin(settings, this);
+            settingsWin.Show();
         }
 
         private void OnExitMenuClicked(object? sender, EventArgs e)

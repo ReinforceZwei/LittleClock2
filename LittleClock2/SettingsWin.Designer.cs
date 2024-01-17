@@ -36,19 +36,36 @@
             this.clickThroughCheckBox = new System.Windows.Forms.CheckBox();
             this.timeDisplayFormatComboBox = new System.Windows.Forms.ComboBox();
             this.timeFormatLabel = new System.Windows.Forms.Label();
-            this.locationLabel = new System.Windows.Forms.Label();
             this.locationXInput = new System.Windows.Forms.NumericUpDown();
             this.xLabel = new System.Windows.Forms.Label();
             this.yLabel = new System.Windows.Forms.Label();
             this.locationYInput = new System.Windows.Forms.NumericUpDown();
+            this.locationGroupBox = new System.Windows.Forms.GroupBox();
+            this.useAbsoluteLocationCheckbox = new System.Windows.Forms.CheckBox();
+            this.bottomRightLocationButton = new System.Windows.Forms.RadioButton();
+            this.bottomLocationButton = new System.Windows.Forms.RadioButton();
+            this.bottomLeftLocation = new System.Windows.Forms.RadioButton();
+            this.rightLocationButton = new System.Windows.Forms.RadioButton();
+            this.centerLocationButton = new System.Windows.Forms.RadioButton();
+            this.leftLocationButton = new System.Windows.Forms.RadioButton();
+            this.topRightLocationButton = new System.Windows.Forms.RadioButton();
+            this.topLocationButton = new System.Windows.Forms.RadioButton();
+            this.topLeftLocationButton = new System.Windows.Forms.RadioButton();
+            this.idleOpacityInput = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.idleTimeoutInput = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.locationXInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locationYInput)).BeginInit();
+            this.locationGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.idleOpacityInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.idleTimeoutInput)).BeginInit();
             this.SuspendLayout();
             // 
             // doneButton
             // 
             this.doneButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.doneButton.Location = new System.Drawing.Point(71, 297);
+            this.doneButton.Location = new System.Drawing.Point(168, 287);
             this.doneButton.Name = "doneButton";
             this.doneButton.Size = new System.Drawing.Size(75, 23);
             this.doneButton.TabIndex = 0;
@@ -59,7 +76,7 @@
             // applyButton
             // 
             this.applyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.applyButton.Location = new System.Drawing.Point(152, 297);
+            this.applyButton.Location = new System.Drawing.Point(249, 287);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
             this.applyButton.TabIndex = 1;
@@ -114,33 +131,24 @@
             // timeDisplayFormatComboBox
             // 
             this.timeDisplayFormatComboBox.FormattingEnabled = true;
-            this.timeDisplayFormatComboBox.Location = new System.Drawing.Point(12, 143);
+            this.timeDisplayFormatComboBox.Location = new System.Drawing.Point(168, 30);
             this.timeDisplayFormatComboBox.Name = "timeDisplayFormatComboBox";
-            this.timeDisplayFormatComboBox.Size = new System.Drawing.Size(121, 23);
+            this.timeDisplayFormatComboBox.Size = new System.Drawing.Size(155, 23);
             this.timeDisplayFormatComboBox.TabIndex = 6;
             this.timeDisplayFormatComboBox.SelectedIndexChanged += new System.EventHandler(this.timeDisplayFormatComboBox_SelectedIndexChanged);
             // 
             // timeFormatLabel
             // 
             this.timeFormatLabel.AutoSize = true;
-            this.timeFormatLabel.Location = new System.Drawing.Point(12, 125);
+            this.timeFormatLabel.Location = new System.Drawing.Point(168, 13);
             this.timeFormatLabel.Name = "timeFormatLabel";
             this.timeFormatLabel.Size = new System.Drawing.Size(122, 15);
             this.timeFormatLabel.TabIndex = 7;
             this.timeFormatLabel.Text = "Time Display Format";
             // 
-            // locationLabel
-            // 
-            this.locationLabel.AutoSize = true;
-            this.locationLabel.Location = new System.Drawing.Point(12, 187);
-            this.locationLabel.Name = "locationLabel";
-            this.locationLabel.Size = new System.Drawing.Size(56, 15);
-            this.locationLabel.TabIndex = 8;
-            this.locationLabel.Text = "Location";
-            // 
             // locationXInput
             // 
-            this.locationXInput.Location = new System.Drawing.Point(12, 229);
+            this.locationXInput.Location = new System.Drawing.Point(177, 20);
             this.locationXInput.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -154,7 +162,7 @@
             // xLabel
             // 
             this.xLabel.AutoSize = true;
-            this.xLabel.Location = new System.Drawing.Point(12, 211);
+            this.xLabel.Location = new System.Drawing.Point(156, 23);
             this.xLabel.Name = "xLabel";
             this.xLabel.Size = new System.Drawing.Size(15, 15);
             this.xLabel.TabIndex = 10;
@@ -163,7 +171,7 @@
             // yLabel
             // 
             this.yLabel.AutoSize = true;
-            this.yLabel.Location = new System.Drawing.Point(72, 211);
+            this.yLabel.Location = new System.Drawing.Point(233, 23);
             this.yLabel.Name = "yLabel";
             this.yLabel.Size = new System.Drawing.Size(14, 15);
             this.yLabel.TabIndex = 11;
@@ -171,7 +179,7 @@
             // 
             // locationYInput
             // 
-            this.locationYInput.Location = new System.Drawing.Point(72, 229);
+            this.locationYInput.Location = new System.Drawing.Point(253, 20);
             this.locationYInput.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -182,16 +190,204 @@
             this.locationYInput.TabIndex = 12;
             this.locationYInput.ValueChanged += new System.EventHandler(this.locationYInput_ValueChanged);
             // 
+            // locationGroupBox
+            // 
+            this.locationGroupBox.Controls.Add(this.useAbsoluteLocationCheckbox);
+            this.locationGroupBox.Controls.Add(this.bottomRightLocationButton);
+            this.locationGroupBox.Controls.Add(this.bottomLocationButton);
+            this.locationGroupBox.Controls.Add(this.bottomLeftLocation);
+            this.locationGroupBox.Controls.Add(this.rightLocationButton);
+            this.locationGroupBox.Controls.Add(this.centerLocationButton);
+            this.locationGroupBox.Controls.Add(this.leftLocationButton);
+            this.locationGroupBox.Controls.Add(this.topRightLocationButton);
+            this.locationGroupBox.Controls.Add(this.topLocationButton);
+            this.locationGroupBox.Controls.Add(this.topLeftLocationButton);
+            this.locationGroupBox.Controls.Add(this.xLabel);
+            this.locationGroupBox.Controls.Add(this.locationYInput);
+            this.locationGroupBox.Controls.Add(this.locationXInput);
+            this.locationGroupBox.Controls.Add(this.yLabel);
+            this.locationGroupBox.Location = new System.Drawing.Point(12, 112);
+            this.locationGroupBox.Name = "locationGroupBox";
+            this.locationGroupBox.Size = new System.Drawing.Size(311, 165);
+            this.locationGroupBox.TabIndex = 13;
+            this.locationGroupBox.TabStop = false;
+            this.locationGroupBox.Text = "Location";
+            // 
+            // useAbsoluteLocationCheckbox
+            // 
+            this.useAbsoluteLocationCheckbox.AutoSize = true;
+            this.useAbsoluteLocationCheckbox.Location = new System.Drawing.Point(7, 22);
+            this.useAbsoluteLocationCheckbox.Name = "useAbsoluteLocationCheckbox";
+            this.useAbsoluteLocationCheckbox.Size = new System.Drawing.Size(148, 19);
+            this.useAbsoluteLocationCheckbox.TabIndex = 22;
+            this.useAbsoluteLocationCheckbox.Text = "Use Absolute Position";
+            this.useAbsoluteLocationCheckbox.UseVisualStyleBackColor = true;
+            this.useAbsoluteLocationCheckbox.CheckedChanged += new System.EventHandler(this.useAbsoluteLocationCheckbox_CheckedChanged);
+            // 
+            // bottomRightLocationButton
+            // 
+            this.bottomRightLocationButton.AutoSize = true;
+            this.bottomRightLocationButton.Location = new System.Drawing.Point(190, 132);
+            this.bottomRightLocationButton.Name = "bottomRightLocationButton";
+            this.bottomRightLocationButton.Size = new System.Drawing.Size(100, 19);
+            this.bottomRightLocationButton.TabIndex = 21;
+            this.bottomRightLocationButton.TabStop = true;
+            this.bottomRightLocationButton.Text = "Bottom Right";
+            this.bottomRightLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // bottomLocationButton
+            // 
+            this.bottomLocationButton.AutoSize = true;
+            this.bottomLocationButton.Location = new System.Drawing.Point(104, 132);
+            this.bottomLocationButton.Name = "bottomLocationButton";
+            this.bottomLocationButton.Size = new System.Drawing.Size(67, 19);
+            this.bottomLocationButton.TabIndex = 20;
+            this.bottomLocationButton.TabStop = true;
+            this.bottomLocationButton.Text = "Bottom";
+            this.bottomLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // bottomLeftLocation
+            // 
+            this.bottomLeftLocation.AutoSize = true;
+            this.bottomLeftLocation.Location = new System.Drawing.Point(7, 132);
+            this.bottomLeftLocation.Name = "bottomLeftLocation";
+            this.bottomLeftLocation.Size = new System.Drawing.Size(91, 19);
+            this.bottomLeftLocation.TabIndex = 19;
+            this.bottomLeftLocation.TabStop = true;
+            this.bottomLeftLocation.Text = "Bottom Left";
+            this.bottomLeftLocation.UseVisualStyleBackColor = true;
+            // 
+            // rightLocationButton
+            // 
+            this.rightLocationButton.AutoSize = true;
+            this.rightLocationButton.Location = new System.Drawing.Point(190, 93);
+            this.rightLocationButton.Name = "rightLocationButton";
+            this.rightLocationButton.Size = new System.Drawing.Size(55, 19);
+            this.rightLocationButton.TabIndex = 18;
+            this.rightLocationButton.TabStop = true;
+            this.rightLocationButton.Text = "Right";
+            this.rightLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // centerLocationButton
+            // 
+            this.centerLocationButton.AutoSize = true;
+            this.centerLocationButton.Location = new System.Drawing.Point(104, 93);
+            this.centerLocationButton.Name = "centerLocationButton";
+            this.centerLocationButton.Size = new System.Drawing.Size(62, 19);
+            this.centerLocationButton.TabIndex = 17;
+            this.centerLocationButton.TabStop = true;
+            this.centerLocationButton.Text = "Center";
+            this.centerLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // leftLocationButton
+            // 
+            this.leftLocationButton.AutoSize = true;
+            this.leftLocationButton.Location = new System.Drawing.Point(7, 93);
+            this.leftLocationButton.Name = "leftLocationButton";
+            this.leftLocationButton.Size = new System.Drawing.Size(46, 19);
+            this.leftLocationButton.TabIndex = 16;
+            this.leftLocationButton.TabStop = true;
+            this.leftLocationButton.Text = "Left";
+            this.leftLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // topRightLocationButton
+            // 
+            this.topRightLocationButton.AutoSize = true;
+            this.topRightLocationButton.Location = new System.Drawing.Point(190, 51);
+            this.topRightLocationButton.Name = "topRightLocationButton";
+            this.topRightLocationButton.Size = new System.Drawing.Size(81, 19);
+            this.topRightLocationButton.TabIndex = 15;
+            this.topRightLocationButton.TabStop = true;
+            this.topRightLocationButton.Text = "Top Right";
+            this.topRightLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // topLocationButton
+            // 
+            this.topLocationButton.AutoSize = true;
+            this.topLocationButton.Location = new System.Drawing.Point(104, 51);
+            this.topLocationButton.Name = "topLocationButton";
+            this.topLocationButton.Size = new System.Drawing.Size(48, 19);
+            this.topLocationButton.TabIndex = 14;
+            this.topLocationButton.TabStop = true;
+            this.topLocationButton.Text = "Top";
+            this.topLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // topLeftLocationButton
+            // 
+            this.topLeftLocationButton.AutoSize = true;
+            this.topLeftLocationButton.Location = new System.Drawing.Point(7, 51);
+            this.topLeftLocationButton.Name = "topLeftLocationButton";
+            this.topLeftLocationButton.Size = new System.Drawing.Size(72, 19);
+            this.topLeftLocationButton.TabIndex = 13;
+            this.topLeftLocationButton.TabStop = true;
+            this.topLeftLocationButton.Text = "Top Left";
+            this.topLeftLocationButton.UseVisualStyleBackColor = true;
+            // 
+            // idleOpacityInput
+            // 
+            this.idleOpacityInput.DecimalPlaces = 2;
+            this.idleOpacityInput.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.idleOpacityInput.Location = new System.Drawing.Point(273, 59);
+            this.idleOpacityInput.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.idleOpacityInput.Name = "idleOpacityInput";
+            this.idleOpacityInput.Size = new System.Drawing.Size(50, 23);
+            this.idleOpacityInput.TabIndex = 14;
+            this.idleOpacityInput.ValueChanged += new System.EventHandler(this.idleOpacityInput_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(168, 61);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(75, 15);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Idle Opacity";
+            // 
+            // idleTimeoutInput
+            // 
+            this.idleTimeoutInput.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.idleTimeoutInput.Location = new System.Drawing.Point(273, 86);
+            this.idleTimeoutInput.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.idleTimeoutInput.Name = "idleTimeoutInput";
+            this.idleTimeoutInput.Size = new System.Drawing.Size(50, 23);
+            this.idleTimeoutInput.TabIndex = 16;
+            this.idleTimeoutInput.ValueChanged += new System.EventHandler(this.idleTimeoutInput_ValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(168, 88);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(105, 15);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "Idle Timeout (ms)";
+            // 
             // SettingsWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(239, 332);
-            this.Controls.Add(this.locationYInput);
-            this.Controls.Add(this.yLabel);
-            this.Controls.Add(this.xLabel);
-            this.Controls.Add(this.locationXInput);
-            this.Controls.Add(this.locationLabel);
+            this.ClientSize = new System.Drawing.Size(336, 322);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.idleTimeoutInput);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.idleOpacityInput);
+            this.Controls.Add(this.locationGroupBox);
             this.Controls.Add(this.timeFormatLabel);
             this.Controls.Add(this.timeDisplayFormatComboBox);
             this.Controls.Add(this.clickThroughCheckBox);
@@ -200,11 +396,15 @@
             this.Controls.Add(this.alwaysOnTopCheckBox);
             this.Controls.Add(this.applyButton);
             this.Controls.Add(this.doneButton);
-            this.MaximumSize = new System.Drawing.Size(255, 371);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "SettingsWin";
             this.Text = "SettingsWin";
             ((System.ComponentModel.ISupportInitialize)(this.locationXInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.locationYInput)).EndInit();
+            this.locationGroupBox.ResumeLayout(false);
+            this.locationGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.idleOpacityInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.idleTimeoutInput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,10 +420,24 @@
         private CheckBox clickThroughCheckBox;
         private ComboBox timeDisplayFormatComboBox;
         private Label timeFormatLabel;
-        private Label locationLabel;
         private NumericUpDown locationXInput;
         private Label xLabel;
         private Label yLabel;
         private NumericUpDown locationYInput;
+        private GroupBox locationGroupBox;
+        private CheckBox useAbsoluteLocationCheckbox;
+        private RadioButton bottomRightLocationButton;
+        private RadioButton bottomLocationButton;
+        private RadioButton bottomLeftLocation;
+        private RadioButton rightLocationButton;
+        private RadioButton centerLocationButton;
+        private RadioButton leftLocationButton;
+        private RadioButton topRightLocationButton;
+        private RadioButton topLocationButton;
+        private RadioButton topLeftLocationButton;
+        private NumericUpDown idleOpacityInput;
+        private Label label1;
+        private NumericUpDown idleTimeoutInput;
+        private Label label2;
     }
 }
