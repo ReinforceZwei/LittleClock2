@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace LittleClock2
 {
@@ -11,51 +12,51 @@ namespace LittleClock2
         /// <summary>
         /// Location of the clock window
         /// </summary>
-        public Point Location = new Point(0, 0);
+        public Point Location { get; set; } = new Point(0, 0);
 
         /// <summary>
         /// Clock window always on top
         /// </summary>
-        public bool AlwaysOnTop = true;
+        public bool AlwaysOnTop { get; set; } = true;
 
         /// <summary>
         /// Clock window draggable
         /// </summary>
-        public bool Draggable = true;
+        public bool Draggable { get; set; } = true;
 
         /// <summary>
         /// Hide clock window on mouse hover
         /// </summary>
-        public bool HideOnHover = true;
+        public bool HideOnHover { get; set; } = true;
 
         /// <summary>
         /// Allow mouse click through the clock window
         /// </summary>
-        public bool ClickThrough = false;
+        public bool ClickThrough { get; set; } = false;
 
         /// <summary>
         /// Clock display format
         /// </summary>
-        public string TimeFormat = "hh:mm:ss tt";
+        public string TimeFormat { get; set; } = "hh:mm:ss tt";
 
         /// <summary>
         /// Opacity when active (e.g. mouse hover)
         /// </summary>
-        public float ActiveOpacity = 1.0f;
+        public float ActiveOpacity { get; set; } = 1.0f;
 
         /// <summary>
         /// Opacity when idle
         /// </summary>
-        public float IdleOpacity = 0.7f;
+        public float IdleOpacity { get; set; } = 0.7f;
 
         /// <summary>
         /// Idle after how many ms
         /// </summary>
-        public int IdleAfter = 2000;
+        public int IdleAfter { get; set; } = 2000;
 
-        public bool UsePresetLocation = false;
+        public bool UsePresetLocation { get; set; } = false;
 
-        public PresetLocation PresetLocation = PresetLocation.TopLeft;
+        public PresetLocation PresetLocation { get; set; } = PresetLocation.TopLeft;
 
         public static Settings Clone(Settings settings)
         {
@@ -73,6 +74,57 @@ namespace LittleClock2
                 ActiveOpacity = settings.ActiveOpacity,
                 PresetLocation = settings.PresetLocation,
             };
+        }
+
+        private static string SettingsFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LittleClock2", "Settings.json");
+        private static JsonSerializerOptions JsonOutputOptions = new()
+        {
+            WriteIndented = true,
+        };
+
+        public void SaveToApplicationData()
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(this, JsonOutputOptions);
+                FileInfo file = new FileInfo(SettingsFilePath);
+                file.Directory.Create();
+                File.WriteAllText(SettingsFilePath, json);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Fail to save settings to disk");
+            }
+        }
+
+        public static Settings LoadFromApplicationData()
+        {
+            try
+            {
+                if (File.Exists(SettingsFilePath))
+                {
+                    var json = File.ReadAllText(SettingsFilePath);
+                    Settings? settings = JsonSerializer.Deserialize<Settings>(json);
+                    if (settings is not null)
+                    {
+                        return settings;
+                    }
+                    else
+                    {
+                        throw new InvalidCastException("Cannot parse settings json");
+                    }
+                }
+                else
+                {
+                    return new Settings();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Fail to load settings from disk");
+                return new Settings();
+            }
         }
     }
 

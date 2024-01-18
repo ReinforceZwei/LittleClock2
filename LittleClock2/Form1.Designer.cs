@@ -73,20 +73,21 @@
             this.settingsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.iconContentMenu.Name = "iconContentMenu";
-            this.iconContentMenu.Size = new System.Drawing.Size(120, 48);
+            this.iconContentMenu.Size = new System.Drawing.Size(181, 70);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.OnSettingMenuClicked);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnExitMenuClicked);
             // 
             // idleTimer
             // 
@@ -100,6 +101,7 @@
             this.Controls.Add(this.timeDisplayLabel);
             this.Name = "MainWin";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWin_FormClosing);
             this.iconContentMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Timers;
@@ -21,7 +22,7 @@ namespace LittleClock2
 
         public MainWin()
         {
-            settings = new Settings();
+            settings = Settings.LoadFromApplicationData();
 
             InitializeComponent();
             InitializeStyle();
@@ -36,22 +37,15 @@ namespace LittleClock2
             idleTimer.Enabled = true;
             idleTimer.Start();
 
-            TopMost = settings.AlwaysOnTop;
-            Location = settings.Location;
-
-            timeDisplayLabel.Text = DateTime.Now.ToString(settings.TimeFormat);
-
-            Width = timeDisplayLabel.Width + 5;
-            Height = 25;
-
-            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, 25, 20, 20));
-
             initialStyle = GetWindowLong(this.Handle, -20);
 
             //var initialStyle = GetWindowLong(this.Handle, -20);
             SetWindowLong(this.Handle, -20, initialStyle | WS_EX_TOOLWINDOW);
             initialStyle = GetWindowLong(this.Handle, -20);
             //EnableClickThrough();
+            ApplySettings();
+
+            SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChange;
         }
 
         public void InitializeStyle()
@@ -69,7 +63,11 @@ namespace LittleClock2
                 return;
             }
             settings = Settings.Clone(newSettings);
+            ApplySettings();
+        }
 
+        public void ApplySettings()
+        {
             if (settings.UsePresetLocation)
             {
                 UpdateWindowRelativeLocation();
@@ -92,6 +90,8 @@ namespace LittleClock2
 
             idleTimer.Interval = settings.IdleAfter;
             Opacity = settings.IdleOpacity;
+
+            settings.SaveToApplicationData();
 
             settingsWin?.NotifyMainWinLocationChange(Location);
         }
@@ -120,6 +120,8 @@ namespace LittleClock2
                 _ => throw new InvalidOperationException("Invalid preset location")
             };
             this.Location = new Point(locationX, locationY);
+            settings.Location = Location;
+            settings.SaveToApplicationData();
         }
 
         private void EnableClickThrough()
@@ -173,6 +175,7 @@ namespace LittleClock2
             {
                 isDragging = false;
                 settings.Location = Location;
+                settings.SaveToApplicationData();
                 settingsWin?.NotifyMainWinLocationChange(Location);
             }
         }
@@ -251,6 +254,16 @@ namespace LittleClock2
         private void OnExitMenuClicked(object? sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void OnDisplaySettingsChange(object? sender, EventArgs e)
+        {
+            UpdateWindowRelativeLocation();
+        }
+
+        private void MainWin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChange;
         }
 
         #region DLL Imports

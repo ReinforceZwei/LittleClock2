@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsWin));
             this.doneButton = new System.Windows.Forms.Button();
             this.applyButton = new System.Windows.Forms.Button();
             this.alwaysOnTopCheckBox = new System.Windows.Forms.CheckBox();
@@ -150,10 +151,15 @@
             // 
             this.locationXInput.Location = new System.Drawing.Point(177, 20);
             this.locationXInput.Maximum = new decimal(new int[] {
-            10000,
+            99999,
             0,
             0,
             0});
+            this.locationXInput.Minimum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            -2147483648});
             this.locationXInput.Name = "locationXInput";
             this.locationXInput.Size = new System.Drawing.Size(50, 23);
             this.locationXInput.TabIndex = 9;
@@ -181,10 +187,15 @@
             // 
             this.locationYInput.Location = new System.Drawing.Point(253, 20);
             this.locationYInput.Maximum = new decimal(new int[] {
-            10000,
+            99999,
             0,
             0,
             0});
+            this.locationYInput.Minimum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            -2147483648});
             this.locationYInput.Name = "locationYInput";
             this.locationYInput.Size = new System.Drawing.Size(50, 23);
             this.locationYInput.TabIndex = 12;
@@ -397,8 +408,9 @@
             this.Controls.Add(this.applyButton);
             this.Controls.Add(this.doneButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SettingsWin";
-            this.Text = "SettingsWin";
+            this.Text = "LittleClock 2 Settings";
             ((System.ComponentModel.ISupportInitialize)(this.locationXInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.locationYInput)).EndInit();
             this.locationGroupBox.ResumeLayout(false);

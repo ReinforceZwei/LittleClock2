@@ -122,12 +122,16 @@ namespace LittleClock2
 
         private void locationXInput_ValueChanged(object sender, EventArgs e)
         {
-            newSettings.Location.X = Convert.ToInt32(locationXInput.Value);
+            var l = newSettings.Location;
+            l.X = Convert.ToInt32(locationXInput.Value);
+            newSettings.Location = l;
         }
 
         private void locationYInput_ValueChanged(object sender, EventArgs e)
         {
-            newSettings.Location.Y = Convert.ToInt32(locationYInput.Value);
+            var l = newSettings.Location;
+            l.Y = Convert.ToInt32(locationYInput.Value);
+            newSettings.Location = l;
         }
 
         private void timeDisplayFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
