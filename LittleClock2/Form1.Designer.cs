@@ -44,11 +44,12 @@
             // 
             this.timeDisplayLabel.AutoSize = true;
             this.timeDisplayLabel.Font = new System.Drawing.Font("Microsoft JhengHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.timeDisplayLabel.Location = new System.Drawing.Point(3, 3);
+            this.timeDisplayLabel.Location = new System.Drawing.Point(3, 2);
             this.timeDisplayLabel.Name = "timeDisplayLabel";
             this.timeDisplayLabel.Size = new System.Drawing.Size(54, 20);
             this.timeDisplayLabel.TabIndex = 0;
             this.timeDisplayLabel.Text = "label1";
+            this.timeDisplayLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.timeDisplayLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             this.timeDisplayLabel.MouseEnter += new System.EventHandler(this.OnMouseEnter);
             this.timeDisplayLabel.MouseLeave += new System.EventHandler(this.OnMouseLeave);
@@ -73,19 +74,19 @@
             this.settingsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.iconContentMenu.Name = "iconContentMenu";
-            this.iconContentMenu.Size = new System.Drawing.Size(181, 70);
+            this.iconContentMenu.Size = new System.Drawing.Size(120, 48);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.OnSettingMenuClicked);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnExitMenuClicked);
             // 
