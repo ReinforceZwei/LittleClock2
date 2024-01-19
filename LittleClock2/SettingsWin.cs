@@ -89,6 +89,8 @@ namespace LittleClock2
 
             textColorDisplay.BackColor = Color.FromArgb(settings.TextColorArgb);
             backgroundColorDisplay.BackColor = Color.FromArgb(settings.BackgrouldColorArgb);
+
+            useRoundedCornerCheckbox.Checked = settings.UseRoundedCorner;
         }
 
         public void NotifyMainWinLocationChange(Point location)
@@ -254,6 +256,11 @@ namespace LittleClock2
                 this.newSettings = new Settings();
                 ConfigurateSettings(this.newSettings);
             }
+        }
+
+        private void useRoundedCornerCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            newSettings.UseRoundedCorner = useRoundedCornerCheckbox.Checked;
         }
     }
 }

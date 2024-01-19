@@ -70,6 +70,8 @@ namespace LittleClock2
 
         public int BackgrouldColorArgb { get; set; } = Color.White.ToArgb();
 
+        public bool UseRoundedCorner { get; set; } = true;
+
         public static Settings Clone(Settings settings)
         {
             return new Settings()
@@ -91,6 +93,7 @@ namespace LittleClock2
                 BottomPadding = settings.BottomPadding,
                 TextColorArgb = settings.TextColorArgb,
                 BackgrouldColorArgb = settings.BackgrouldColorArgb,
+                UseRoundedCorner = settings.UseRoundedCorner,
             };
         }
 

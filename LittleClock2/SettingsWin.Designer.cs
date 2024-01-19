@@ -74,6 +74,7 @@
             this.fontStyleSelectBox = new System.Windows.Forms.ComboBox();
             this.fontSelectBox = new System.Windows.Forms.ComboBox();
             this.resetBtn = new System.Windows.Forms.Button();
+            this.useRoundedCornerCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.locationXInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locationYInput)).BeginInit();
             this.locationGroupBox.SuspendLayout();
@@ -473,6 +474,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.useRoundedCornerCheckbox);
             this.tabPage3.Controls.Add(this.label6);
             this.tabPage3.Controls.Add(this.bottomPaddingInput);
             this.tabPage3.Controls.Add(this.label5);
@@ -623,6 +625,17 @@
             this.resetBtn.UseVisualStyleBackColor = true;
             this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
             // 
+            // useRoundedCornerCheckbox
+            // 
+            this.useRoundedCornerCheckbox.AutoSize = true;
+            this.useRoundedCornerCheckbox.Location = new System.Drawing.Point(6, 141);
+            this.useRoundedCornerCheckbox.Name = "useRoundedCornerCheckbox";
+            this.useRoundedCornerCheckbox.Size = new System.Drawing.Size(144, 19);
+            this.useRoundedCornerCheckbox.TabIndex = 13;
+            this.useRoundedCornerCheckbox.Text = "Use Rounded Corner";
+            this.useRoundedCornerCheckbox.UseVisualStyleBackColor = true;
+            this.useRoundedCornerCheckbox.CheckedChanged += new System.EventHandler(this.useRoundedCornerCheckbox_CheckedChanged);
+            // 
             // SettingsWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -704,5 +717,6 @@
         private NumericUpDown bottomPaddingInput;
         private LinkLabel linkLabel1;
         private Button resetBtn;
+        private CheckBox useRoundedCornerCheckbox;
     }
 }

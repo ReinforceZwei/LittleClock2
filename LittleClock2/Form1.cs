@@ -93,7 +93,14 @@ namespace LittleClock2
             UpdateClockText();
             Width = size.Width + 6; //timeDisplayLabel.Width + 5;
             Height = size.Height + settings.BottomPadding;
-            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            if (settings.UseRoundedCorner)
+            {
+                Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+            }
+            else
+            {
+                Region = null;
+            }
 
             idleTimer.Interval = settings.IdleAfter;
             Opacity = settings.IdleOpacity;
