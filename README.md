@@ -4,6 +4,9 @@ Simple, small, lightweight Desktop Clock for Windows - rewrite version with bugf
 
 ![LittleClock2_Screenshot](LittleClock2_Screenshot.png)
 
-# Todo
+# Features
 
-- [ ] Allow free-text input for time display format
+- Click-throughable (i.e. doesn't block mouse click)
+- Hide the clock on mouse hover
+- Support transparent
+- Fully customizable looking (e.g. colors, font, size)
