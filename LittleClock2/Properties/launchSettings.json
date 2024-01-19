@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LittleClock2": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "LITTLECLOCK_DEBUG": "true"
+      }
+    }
+  }
+}

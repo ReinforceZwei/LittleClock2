@@ -46,6 +46,13 @@ namespace LittleClock2
             ApplySettings();
 
             SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChange;
+
+            string debug = Environment.GetEnvironmentVariable("LITTLECLOCK_DEBUG") ?? "false";
+            if (bool.Parse(debug))
+            {
+                settingsWin = new SettingsWin(settings, this);
+                settingsWin.Show();
+            }
         }
 
         public void InitializeStyle()
@@ -68,6 +75,29 @@ namespace LittleClock2
 
         public void ApplySettings()
         {
+            TopMost = settings.AlwaysOnTop;
+
+            if (settings.ClickThrough)
+                EnableClickThrough();
+            else
+                DisableClickThrough();
+
+            var font = new Font(settings.FontFamily, settings.FontSize, settings.FontStyle);
+            var size = TextRenderer.MeasureText(DateTime.Now.ToString(settings.TimeFormat), font);
+            Debug.WriteLine($"Measured size: w{size.Width} x h{size.Height}");
+
+            timeDisplayLabel.Font = font;
+            BackColor = Color.FromArgb(settings.BackgrouldColorArgb);
+            timeDisplayLabel.ForeColor = Color.FromArgb(settings.TextColorArgb);
+
+            UpdateClockText();
+            Width = size.Width + 6; //timeDisplayLabel.Width + 5;
+            Height = size.Height + settings.BottomPadding;
+            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 20, 20));
+
+            idleTimer.Interval = settings.IdleAfter;
+            Opacity = settings.IdleOpacity;
+
             if (settings.UsePresetLocation)
             {
                 UpdateWindowRelativeLocation();
@@ -77,23 +107,20 @@ namespace LittleClock2
                 Location = settings.Location;
             }
 
-            TopMost = settings.AlwaysOnTop;
-
-            if (settings.ClickThrough)
-                EnableClickThrough();
-            else
-                DisableClickThrough();
-
-            UpdateClockText();
-            Width = timeDisplayLabel.Width + 5;
-            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, 25, 20, 20));
-
-            idleTimer.Interval = settings.IdleAfter;
-            Opacity = settings.IdleOpacity;
-
             settings.SaveToApplicationData();
 
             settingsWin?.NotifyMainWinLocationChange(Location);
+        }
+
+        public void TestSettings()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(TestSettings);
+                return;
+            }
+            //Region = null;
+            Debug.WriteLine($"w{Width} x h{Height}");
         }
 
         public void UpdateClockText()
@@ -104,7 +131,7 @@ namespace LittleClock2
         public void UpdateWindowRelativeLocation()
         {
             var monitorSize = Screen.FromControl(this).Bounds.Size;
-            var relativeSize = new Size(monitorSize.Width - this.Width, monitorSize.Height - this.Height + 15);
+            var relativeSize = new Size(monitorSize.Width - this.Width, monitorSize.Height - this.Height);
             int locationX = settings.PresetLocation switch
             {
                 PresetLocation.TopLeft or PresetLocation.Left or PresetLocation.BottomLeft => 0,

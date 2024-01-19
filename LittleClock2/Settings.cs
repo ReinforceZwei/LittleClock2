@@ -58,6 +58,18 @@ namespace LittleClock2
 
         public PresetLocation PresetLocation { get; set; } = PresetLocation.TopLeft;
 
+        public string FontFamily { get; set; } = "Microsoft JhengHei UI";
+
+        public FontStyle FontStyle { get; set; } = FontStyle.Regular;
+
+        public float FontSize { get; set; } = 12;
+
+        public int BottomPadding { get; set; } = 5;
+
+        public int TextColorArgb { get; set; } = Color.Black.ToArgb();
+
+        public int BackgrouldColorArgb { get; set; } = Color.White.ToArgb();
+
         public static Settings Clone(Settings settings)
         {
             return new Settings()
@@ -73,6 +85,12 @@ namespace LittleClock2
                 TimeFormat = settings.TimeFormat,
                 ActiveOpacity = settings.ActiveOpacity,
                 PresetLocation = settings.PresetLocation,
+                FontFamily = settings.FontFamily,
+                FontStyle = settings.FontStyle,
+                FontSize = settings.FontSize,
+                BottomPadding = settings.BottomPadding,
+                TextColorArgb = settings.TextColorArgb,
+                BackgrouldColorArgb = settings.BackgrouldColorArgb,
             };
         }
 

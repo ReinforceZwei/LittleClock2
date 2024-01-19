@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace LittleClock2
 {
     public partial class SettingsWin : Form
     {
+        private static readonly string githubLink = "https://github.com/ReinforceZwei/LittleClock2";
+
         Settings settings;
         Settings newSettings;
         MainWin mainWin;
@@ -35,6 +38,18 @@ namespace LittleClock2
             this.mainWin = win;
 
             timeDisplayFormatComboBox.Items.AddRange(TimeFormat);
+
+            fontSelectBox.Items.AddRange(FontFamily.Families.Select(f => f.Name).ToArray());
+            fontStyleSelectBox.Items.Add(FontStyle.Regular);
+            fontStyleSelectBox.Items.Add(FontStyle.Bold);
+            fontStyleSelectBox.Items.Add(FontStyle.Italic);
+            fontStyleSelectBox.Items.Add(FontStyle.Underline);
+
+            ConfigurateSettings(this.settings);
+        }
+
+        private void ConfigurateSettings(Settings settings)
+        {
             timeDisplayFormatComboBox.Text = settings.TimeFormat;
 
             alwaysOnTopCheckBox.Checked = settings.AlwaysOnTop;
@@ -65,6 +80,15 @@ namespace LittleClock2
 
             idleOpacityInput.Value = (decimal)settings.IdleOpacity;
             idleTimeoutInput.Value = settings.IdleAfter;
+
+            fontSelectBox.SelectedIndex = fontSelectBox.FindStringExact(settings.FontFamily);
+            fontStyleSelectBox.SelectedIndex = fontStyleSelectBox.FindStringExact(settings.FontStyle.ToString());
+            fontSizeInput.Value = (decimal)settings.FontSize;
+
+            bottomPaddingInput.Value = settings.BottomPadding;
+
+            textColorDisplay.BackColor = Color.FromArgb(settings.TextColorArgb);
+            backgroundColorDisplay.BackColor = Color.FromArgb(settings.BackgrouldColorArgb);
         }
 
         public void NotifyMainWinLocationChange(Point location)
@@ -134,7 +158,7 @@ namespace LittleClock2
             newSettings.Location = l;
         }
 
-        private void timeDisplayFormatComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void timeDisplayFormatComboBox_TextUpdate(object sender, EventArgs e)
         {
             newSettings.TimeFormat = timeDisplayFormatComboBox.Text;
         }
@@ -159,6 +183,77 @@ namespace LittleClock2
         private void idleTimeoutInput_ValueChanged(object sender, EventArgs e)
         {
             newSettings.IdleAfter = (int)idleTimeoutInput.Value;
+        }
+
+        private void fontSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            newSettings.FontFamily = fontSelectBox.Text;
+        }
+
+        private void fontStyleSelectBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            newSettings.FontStyle = Enum.Parse<FontStyle>(fontStyleSelectBox.Text);
+        }
+
+        private void fontSizeInput_ValueChanged(object sender, EventArgs e)
+        {
+            newSettings.FontSize = (float)fontSizeInput.Value;
+        }
+
+        private void bottomPaddingInput_ValueChanged(object sender, EventArgs e)
+        {
+            newSettings.BottomPadding = (int)bottomPaddingInput.Value;
+        }
+
+        private void pickTextColorBtn_Click(object sender, EventArgs e)
+        {
+            var colorPicker = new ColorDialog()
+            {
+                FullOpen = true,
+                Color = Color.FromArgb(newSettings.TextColorArgb),
+            };
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                newSettings.TextColorArgb = colorPicker.Color.ToArgb();
+                textColorDisplay.BackColor = colorPicker.Color;
+            }
+        }
+
+        private void pickBackgroundColorBtn_Click(object sender, EventArgs e)
+        {
+            var colorPicker = new ColorDialog()
+            {
+                FullOpen = true,
+                Color = Color.FromArgb(newSettings.BackgrouldColorArgb),
+            };
+            if (colorPicker.ShowDialog() == DialogResult.OK)
+            {
+                newSettings.BackgrouldColorArgb = colorPicker.Color.ToArgb();
+                backgroundColorDisplay.BackColor = colorPicker.Color;
+            }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                linkLabel1.LinkVisited = true;
+                Process.Start(githubLink);
+            }
+            catch
+            {
+                MessageBox.Show("Fail to open URL");
+            }
+        }
+
+        private void resetBtn_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you sure to reset all settings?", "Reset Settings", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                this.newSettings = new Settings();
+                ConfigurateSettings(this.newSettings);
+            }
         }
     }
 }
