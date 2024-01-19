@@ -240,7 +240,7 @@ namespace LittleClock2
             try
             {
                 linkLabel1.LinkVisited = true;
-                Process.Start(githubLink);
+                Process.Start(new ProcessStartInfo(githubLink) { UseShellExecute = true });
             }
             catch
             {
