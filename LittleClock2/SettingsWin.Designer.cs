@@ -61,6 +61,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.useRoundedCornerCheckbox = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.bottomPaddingInput = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -74,7 +75,6 @@
             this.fontStyleSelectBox = new System.Windows.Forms.ComboBox();
             this.fontSelectBox = new System.Windows.Forms.ComboBox();
             this.resetBtn = new System.Windows.Forms.Button();
-            this.useRoundedCornerCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.locationXInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locationYInput)).BeginInit();
             this.locationGroupBox.SuspendLayout();
@@ -163,7 +163,7 @@
             this.timeDisplayFormatComboBox.Name = "timeDisplayFormatComboBox";
             this.timeDisplayFormatComboBox.Size = new System.Drawing.Size(155, 23);
             this.timeDisplayFormatComboBox.TabIndex = 6;
-            this.timeDisplayFormatComboBox.TextUpdate += new System.EventHandler(this.timeDisplayFormatComboBox_TextUpdate);
+            this.timeDisplayFormatComboBox.TextChanged += new System.EventHandler(this.timeDisplayFormatComboBox_TextUpdate);
             // 
             // timeFormatLabel
             // 
@@ -495,6 +495,17 @@
             this.tabPage3.Text = "Style";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // useRoundedCornerCheckbox
+            // 
+            this.useRoundedCornerCheckbox.AutoSize = true;
+            this.useRoundedCornerCheckbox.Location = new System.Drawing.Point(6, 141);
+            this.useRoundedCornerCheckbox.Name = "useRoundedCornerCheckbox";
+            this.useRoundedCornerCheckbox.Size = new System.Drawing.Size(144, 19);
+            this.useRoundedCornerCheckbox.TabIndex = 13;
+            this.useRoundedCornerCheckbox.Text = "Use Rounded Corner";
+            this.useRoundedCornerCheckbox.UseVisualStyleBackColor = true;
+            this.useRoundedCornerCheckbox.CheckedChanged += new System.EventHandler(this.useRoundedCornerCheckbox_CheckedChanged);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -624,17 +635,6 @@
             this.resetBtn.Text = "Reset";
             this.resetBtn.UseVisualStyleBackColor = true;
             this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
-            // 
-            // useRoundedCornerCheckbox
-            // 
-            this.useRoundedCornerCheckbox.AutoSize = true;
-            this.useRoundedCornerCheckbox.Location = new System.Drawing.Point(6, 141);
-            this.useRoundedCornerCheckbox.Name = "useRoundedCornerCheckbox";
-            this.useRoundedCornerCheckbox.Size = new System.Drawing.Size(144, 19);
-            this.useRoundedCornerCheckbox.TabIndex = 13;
-            this.useRoundedCornerCheckbox.Text = "Use Rounded Corner";
-            this.useRoundedCornerCheckbox.UseVisualStyleBackColor = true;
-            this.useRoundedCornerCheckbox.CheckedChanged += new System.EventHandler(this.useRoundedCornerCheckbox_CheckedChanged);
             // 
             // SettingsWin
             // 
