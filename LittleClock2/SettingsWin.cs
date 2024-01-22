@@ -100,6 +100,12 @@ namespace LittleClock2
             locationYInput.Value = newSettings.Location.Y;
         }
 
+        public void NotifySettingsChange(Settings newSettings)
+        {
+            this.newSettings = newSettings;
+            ConfigurateSettings(newSettings);
+        }
+
         private void OnApplyButtonClicked(object? sender, EventArgs e)
         {
             var checkedLocation = locationGroupBox.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);

@@ -50,8 +50,7 @@ namespace LittleClock2
             string debug = Environment.GetEnvironmentVariable("LITTLECLOCK_DEBUG") ?? "false";
             if (bool.Parse(debug))
             {
-                settingsWin = new SettingsWin(settings, this);
-                settingsWin.Show();
+                OpenSettingsWindow();
             }
         }
 
@@ -76,6 +75,7 @@ namespace LittleClock2
         public void ApplySettings()
         {
             TopMost = settings.AlwaysOnTop;
+            alwaysOnTopToolStripMenuItem.Checked = settings.AlwaysOnTop;
 
             if (settings.ClickThrough)
                 EnableClickThrough();
@@ -190,6 +190,23 @@ namespace LittleClock2
             o.Opacity = opacity; //make fully invisible       
         }
 
+        private void OpenSettingsWindow()
+        {
+            if (settingsWin is null)
+            {
+                settingsWin = new SettingsWin(settings, this);
+                settingsWin.FormClosed += (o, a) =>
+                {
+                    settingsWin = null;
+                };
+                settingsWin.Show();
+            }
+            else
+            {
+                settingsWin.Activate();
+            }
+        }
+
         private void OnMouseDown(object? sender, MouseEventArgs e)
         {
             if (settings.Draggable)
@@ -281,8 +298,7 @@ namespace LittleClock2
         private void OnSettingMenuClicked(object? sender, EventArgs e)
         {
             settings.Location = Location;
-            settingsWin = new SettingsWin(settings, this);
-            settingsWin.Show();
+            OpenSettingsWindow();
         }
 
         private void OnExitMenuClicked(object? sender, EventArgs e)
@@ -298,6 +314,13 @@ namespace LittleClock2
         private void MainWin_FormClosing(object sender, FormClosingEventArgs e)
         {
             SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChange;
+        }
+
+        private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings.AlwaysOnTop = !settings.AlwaysOnTop;
+            ApplySettings();
+            settingsWin?.NotifySettingsChange(Settings.Clone(settings));
         }
 
         #region DLL Imports
