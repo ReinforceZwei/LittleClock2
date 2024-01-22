@@ -58,6 +58,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.settingModeLabel = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -431,6 +432,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.settingModeLabel);
             this.tabPage1.Controls.Add(this.linkLabel1);
             this.tabPage1.Controls.Add(this.alwaysOnTopCheckBox);
             this.tabPage1.Controls.Add(this.label2);
@@ -449,6 +451,15 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // settingModeLabel
+            // 
+            this.settingModeLabel.Location = new System.Drawing.Point(122, 159);
+            this.settingModeLabel.Name = "settingModeLabel";
+            this.settingModeLabel.Size = new System.Drawing.Size(203, 23);
+            this.settingModeLabel.TabIndex = 19;
+            this.settingModeLabel.Text = "Using AppData settings";
+            this.settingModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // linkLabel1
             // 
@@ -718,5 +729,6 @@
         private LinkLabel linkLabel1;
         private Button resetBtn;
         private CheckBox useRoundedCornerCheckbox;
+        private Label settingModeLabel;
     }
 }

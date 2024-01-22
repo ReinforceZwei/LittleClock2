@@ -33,6 +33,11 @@ namespace LittleClock2
         public SettingsWin(Settings settings, MainWin win)
         {
             InitializeComponent();
+            if (Settings.UsePortableSettings)
+            {
+                this.Text = $"{this.Text} (Portable)";
+                settingModeLabel.Text = "Using portable settings";
+            }
             this.settings = settings;
             this.newSettings = Settings.Clone(settings);
             this.mainWin = win;

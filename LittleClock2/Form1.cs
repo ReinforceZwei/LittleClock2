@@ -22,7 +22,7 @@ namespace LittleClock2
 
         public MainWin()
         {
-            settings = Settings.LoadFromApplicationData();
+            settings = Settings.LoadFromDisk();
 
             InitializeComponent();
             InitializeStyle();
@@ -114,7 +114,7 @@ namespace LittleClock2
                 Location = settings.Location;
             }
 
-            settings.SaveToApplicationData();
+            settings.SaveToDisk();
 
             settingsWin?.NotifyMainWinLocationChange(Location);
         }
@@ -155,7 +155,7 @@ namespace LittleClock2
             };
             this.Location = new Point(locationX, locationY);
             settings.Location = Location;
-            settings.SaveToApplicationData();
+            settings.SaveToDisk();
         }
 
         private void EnableClickThrough()
@@ -226,7 +226,7 @@ namespace LittleClock2
             {
                 isDragging = false;
                 settings.Location = Location;
-                settings.SaveToApplicationData();
+                settings.SaveToDisk();
                 settingsWin?.NotifyMainWinLocationChange(Location);
             }
         }

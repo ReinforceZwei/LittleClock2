@@ -97,21 +97,31 @@ namespace LittleClock2
             };
         }
 
-        private static string SettingsFilePath = Path.Combine(
+        private static readonly string SettingsFilePathAppData = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LittleClock2", "Settings.json");
+
+        private static readonly string? ExeDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        private static readonly string? SettingsFilePathExeDir = ExeDir is null
+            ? null 
+            : Path.Combine(ExeDir, "LittleClock2_Settings.json");
+        public static readonly bool UsePortableSettings = !string.IsNullOrEmpty(SettingsFilePathExeDir) && File.Exists(SettingsFilePathExeDir);
+
         private static JsonSerializerOptions JsonOutputOptions = new()
         {
             WriteIndented = true,
         };
 
-        public void SaveToApplicationData()
+        private static string GetSettingFilePath()
+        {
+            return UsePortableSettings ? SettingsFilePathExeDir! : SettingsFilePathAppData;
+        }
+
+        public void SaveToDisk()
         {
             try
             {
-                var json = JsonSerializer.Serialize(this, JsonOutputOptions);
-                FileInfo file = new FileInfo(SettingsFilePath);
-                file.Directory.Create();
-                File.WriteAllText(SettingsFilePath, json);
+                string path = GetSettingFilePath();
+                SaveToPath(path);
             }
             catch (Exception ex)
             {
@@ -119,31 +129,52 @@ namespace LittleClock2
             }
         }
 
-        public static Settings LoadFromApplicationData()
+        public static Settings LoadFromDisk()
         {
             try
             {
-                if (File.Exists(SettingsFilePath))
-                {
-                    var json = File.ReadAllText(SettingsFilePath);
-                    Settings? settings = JsonSerializer.Deserialize<Settings>(json);
-                    if (settings is not null)
-                    {
-                        return settings;
-                    }
-                    else
-                    {
-                        throw new InvalidCastException("Cannot parse settings json");
-                    }
-                }
-                else
-                {
-                    return new Settings();
-                }
+                string path = GetSettingFilePath();
+                return LoadFromPath(path);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Fail to load settings from disk");
+                return new Settings();
+            }
+        }
+
+        private void SaveToPath(string path)
+        {
+            var json = JsonSerializer.Serialize(this, JsonOutputOptions);
+            FileInfo file = new FileInfo(path);
+            file.Directory.Create();
+            File.WriteAllText(path, json);
+        }
+
+        private static Settings LoadFromPath(string path)
+        {
+            if (File.Exists(path))
+            {
+                var json = File.ReadAllText(path);
+
+                // Check empty file, return default
+                if (json is not null && json.Length == 0)
+                {
+                    return new Settings();
+                }
+
+                Settings? settings = JsonSerializer.Deserialize<Settings>(json);
+                if (settings is not null)
+                {
+                    return settings;
+                }
+                else
+                {
+                    throw new InvalidCastException("Cannot parse settings json");
+                }
+            }
+            else
+            {
                 return new Settings();
             }
         }
