@@ -97,11 +97,11 @@ namespace LittleClock2
             };
         }
 
-        private static readonly string SettingsFilePathAppData = Path.Combine(
+        public static readonly string SettingsFilePathAppData = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LittleClock2", "Settings.json");
 
-        private static readonly string? ExeDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        private static readonly string? SettingsFilePathExeDir = ExeDir is null
+        public static readonly string? ExeDir = AppContext.BaseDirectory;
+        public static readonly string? SettingsFilePathExeDir = string.IsNullOrEmpty(ExeDir)
             ? null 
             : Path.Combine(ExeDir, "LittleClock2_Settings.json");
         public static readonly bool UsePortableSettings = !string.IsNullOrEmpty(SettingsFilePathExeDir) && File.Exists(SettingsFilePathExeDir);
@@ -111,7 +111,7 @@ namespace LittleClock2
             WriteIndented = true,
         };
 
-        private static string GetSettingFilePath()
+        public static string GetSettingFilePath()
         {
             return UsePortableSettings ? SettingsFilePathExeDir! : SettingsFilePathAppData;
         }
