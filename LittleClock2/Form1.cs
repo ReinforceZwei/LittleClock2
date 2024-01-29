@@ -308,7 +308,10 @@ namespace LittleClock2
 
         private void OnDisplaySettingsChange(object? sender, EventArgs e)
         {
-            UpdateWindowRelativeLocation();
+            if (settings.UsePresetLocation)
+            {
+                UpdateWindowRelativeLocation();
+            }
         }
 
         private void MainWin_FormClosing(object sender, FormClosingEventArgs e)
