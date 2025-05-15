@@ -2,11 +2,20 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Resources\Devidol!.ico</ApplicationIcon>
+    
+    <!-- Add single file publish options -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <!-- Optional: Uncomment to enable trimming (test thoroughly first)
+    <PublishTrimmed>true</PublishTrimmed> 
+    -->
   </PropertyGroup>
 
   <ItemGroup>

@@ -68,6 +68,7 @@
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Little Clock 2";
             this.notifyIcon.Visible = true;
+            this.notifyIcon.Click += OnIconMenuClicked;
             // 
             // iconContentMenu
             // 

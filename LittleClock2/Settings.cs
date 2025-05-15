@@ -72,12 +72,18 @@ namespace LittleClock2
 
         public bool UseRoundedCorner { get; set; } = true;
 
+        /// <summary>
+        /// Force the window to always stay on top, overriding AlwaysOnTop
+        /// </summary>
+        public bool ForceAlwaysOnTop { get; set; } = false;
+
         public static Settings Clone(Settings settings)
         {
             return new Settings()
             {
                 Location = settings.Location,
                 AlwaysOnTop = settings.AlwaysOnTop,
+                ForceAlwaysOnTop = settings.ForceAlwaysOnTop,
                 Draggable = settings.Draggable,
                 HideOnHover = settings.HideOnHover,
                 ClickThrough = settings.ClickThrough,

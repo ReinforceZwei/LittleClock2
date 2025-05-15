@@ -58,6 +58,8 @@ namespace LittleClock2
             timeDisplayFormatComboBox.Text = settings.TimeFormat;
 
             alwaysOnTopCheckBox.Checked = settings.AlwaysOnTop;
+            forceAlwaysOnTopCheckbox.Checked = settings.ForceAlwaysOnTop;
+            forceAlwaysOnTopCheckbox.Enabled = settings.AlwaysOnTop;
             draggableCheckBox.Checked = settings.Draggable;
             hideOnHoverCheckBox.Checked = settings.HideOnHover;
             clickThroughCheckBox.Checked = settings.ClickThrough;
@@ -140,6 +142,7 @@ namespace LittleClock2
         private void alwaysOnTopCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             newSettings.AlwaysOnTop = alwaysOnTopCheckBox.Checked;
+            forceAlwaysOnTopCheckbox.Enabled = alwaysOnTopCheckBox.Checked;
         }
 
         private void draggableCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -272,6 +275,11 @@ namespace LittleClock2
         private void useRoundedCornerCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             newSettings.UseRoundedCorner = useRoundedCornerCheckbox.Checked;
+        }
+
+        private void forceAlwaysOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            newSettings.ForceAlwaysOnTop = forceAlwaysOnTopCheckbox.Checked;
         }
     }
 }

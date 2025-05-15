@@ -1,6 +1,7 @@
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Timers;
 
 namespace LittleClock2
@@ -19,6 +20,7 @@ namespace LittleClock2
         private int initialStyle;
 
         private System.Timers.Timer clockUpdateTimer;
+        private System.Windows.Forms.Timer topMostCheckTimer;
 
         public MainWin()
         {
@@ -26,6 +28,15 @@ namespace LittleClock2
 
             InitializeComponent();
             InitializeStyle();
+
+            // Initialize topmost check timer
+            topMostCheckTimer = new System.Windows.Forms.Timer();
+            topMostCheckTimer.Interval = 10000; // 10 seconds
+            topMostCheckTimer.Tick += OnTopMostCheckTick;
+            if (settings.AlwaysOnTop && settings.ForceAlwaysOnTop)
+            {
+                topMostCheckTimer.Start();
+            }
 
             clockUpdateTimer = new System.Timers.Timer();
             clockUpdateTimer.Interval = TimeSpan.FromSeconds(1).TotalMilliseconds;
@@ -76,6 +87,15 @@ namespace LittleClock2
         {
             TopMost = settings.AlwaysOnTop;
             alwaysOnTopToolStripMenuItem.Checked = settings.AlwaysOnTop;
+
+            if (settings.AlwaysOnTop && settings.ForceAlwaysOnTop)
+            {
+                topMostCheckTimer.Enabled = true;
+            }
+            else
+            {
+                topMostCheckTimer.Enabled = false;
+            }
 
             if (settings.ClickThrough)
                 EnableClickThrough();
@@ -314,9 +334,24 @@ namespace LittleClock2
             }
         }
 
+        private void OnTopMostCheckTick(object? sender, EventArgs e)
+        {
+            if (IsWindowObscured())
+            {
+                Debug.WriteLine("Window is obscured, bringing to front");
+                // Force window to top
+                TopMost = false;
+                TopMost = true;
+                BringToFront();
+                //Activate();
+            }
+        }
+
         private void MainWin_FormClosing(object sender, FormClosingEventArgs e)
         {
             SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChange;
+            topMostCheckTimer.Stop();
+            topMostCheckTimer.Dispose();
         }
 
         private void alwaysOnTopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -352,6 +387,50 @@ namespace LittleClock2
         [DllImport("user32.dll")]
         static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
+        [DllImport("user32.dll")]
+        static extern bool IsWindowVisible(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr WindowFromPoint(Point point);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetAncestor(IntPtr hwnd, uint gaFlags);
+
+        const uint GA_ROOT = 2;  // Retrieves the root window by walking the chain of parent windows
+
         #endregion
+
+        private bool IsWindowObscured()
+        {
+            if (!settings.AlwaysOnTop) return false;
+            
+            // If window is not visible at all
+            Debug.WriteLine($"IsWindowVisible: {IsWindowVisible(this.Handle)}");
+            if (!IsWindowVisible(this.Handle)) return true;
+
+            // Get the window bounds
+            var bounds = this.Bounds;
+            
+            // Get the window at our center point
+            var centerPoint = new Point(
+                bounds.Left + bounds.Width / 2,
+                bounds.Top + bounds.Height / 2
+            );
+            
+            var windowAtPoint = WindowFromPoint(centerPoint);
+            if (windowAtPoint == IntPtr.Zero) return false;
+
+            // Get the top-level window that contains the point
+            var topLevelWindow = GetAncestor(windowAtPoint, GA_ROOT);
+            
+            // Get our own top-level window handle
+            var ourTopLevel = GetAncestor(this.Handle, GA_ROOT);
+
+            Debug.WriteLine($"Window at point: ({windowAtPoint})");
+            Debug.WriteLine($"Top level window: ({topLevelWindow})");
+            Debug.WriteLine($"Our top level window: ({ourTopLevel})");
+
+            return topLevelWindow != ourTopLevel;
+        }
     }
 }
